@@ -27,8 +27,9 @@ df_targets["CID"] = df_targets["CID"].astype(int)
 df_desc["CID"] = df_desc["CID"].astype(int)
 df_merged = pd.merge(df_targets, df_desc, on="CID")
 
-X = df_merged.iloc[:, -4800:]
-y = df_merged[[col for col in df_merged.columns if col.endswith("_label")]]
+label_columns = [col for col in df_merged.columns if col.endswith("_label")]
+X = df_merged.drop(columns=label_columns + ["CID"])
+y = df_merged[label_columns]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
