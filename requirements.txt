@@ -1,0 +1,8 @@
+pandas>=1.3
+scikit-learn>=1.0
+numpy>=1.21
+# Optional visualization tools (uncomment if needed)
+# matplotlib>=3.5
+# seaborn>=0.11
+# RDKit for molecular structures (PyPI version)
+rdkit-pypi>=2022.3.5
