@@ -13,6 +13,7 @@ from sklearn.metrics import mean_squared_error, r2_score, accuracy_score, confus
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.multiclass import OneVsRestClassifier
+from Oversampling import oversample_weak_labels
 
 # 2. Завантаження даних
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -41,7 +42,7 @@ odor_labels = ["BAKERY", "SWEET", "FRUIT", "FISH", "GARLIC", "SPICES", "COLD", "
 #
 # df_merged = pd.merge(df_grouped, df_desc, on="CID")
 #========================================================================================
-df_train = df_train[df_train["Intensity"].str.strip() == "high"]
+# df_train = df_train[df_train["Intensity"].str.strip() == "high"]
 
 df_grouped = df_train.groupby("Compound Identifier")[odor_labels].sum().reset_index()
 df_grouped.columns = ["CID"] + odor_labels
@@ -84,6 +85,19 @@ X_train, X_test, y_train, y_test = train_test_split(
 X_train.columns = X_train.columns.astype(str).str.replace(r"[<>\[\]]", " ", regex=True)
 X_test.columns = X_test.columns.astype(str).str.replace(r"[<>\[\]]", " ", regex=True)
 
+# print("Before oversampling:")
+# for label in y_train.columns:
+#     print(label)
+#     print(y_train[label].value_counts())
+# print("Before:", X_train.shape, y_train.shape)
+
+# X_resampled, y_resampled = oversample_weak_labels(X_train, y_train, min_pos_threshold=0.3, target_pos_count=100)
+
+# print("\nAfter oversampling:")
+# for label in y_resampled.columns:
+#     print(label)
+#     print(y_resampled[label].value_counts())
+# print("After:", X_resampled.shape, y_resampled.shape)
 
 # 9. Вибір моделі
 model = OneVsRestClassifier(
