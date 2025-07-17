@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.multiclass import OneVsRestClassifier
 from Oversampling import oversample_weak_labels
+from ThresholdTuning import tune_thresholds
 
 # 2. Завантаження даних
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -114,11 +115,18 @@ model = OneVsRestClassifier(
 model.fit(X_train, y_train)
 
 # 11. Передбачення
-y_pred = model.predict(X_test)
+# y_pred = model.predict(X_test)
 y_pred_proba = model.predict_proba(X_test)
 
+thresholds = tune_thresholds(y_test.values, y_pred_proba, odor_labels)
+
+y_pred = np.zeros_like(y_pred_proba, dtype=int)
+for i, label in enumerate(odor_labels):
+    threshold = thresholds[label]
+    y_pred[:,i] = (y_pred_proba[:,i] >= threshold).astype(int)
+
 # 12. Оцінка
-for i, label in enumerate(y.columns):
+for i, label in enumerate(y_test.columns):
     print(f"\n===== {label} =====")
     print(classification_report(y_test[label], y_pred[:, i]))
 
