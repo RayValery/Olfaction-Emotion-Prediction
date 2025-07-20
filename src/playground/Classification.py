@@ -14,7 +14,7 @@ from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.multiclass import OneVsRestClassifier
 from Oversampling import oversample_weak_labels
-from ThresholdTuning import tune_thresholds
+from ThresholdTuner import tune_thresholds
 
 # 2. Завантаження даних
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
